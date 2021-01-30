@@ -1,0 +1,62 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <link href="../Content/bootstrap.min.css" rel="stylesheet" />
+    <title></title>
+</head>
+<body>
+    <div class="jumbotron">
+        <h2>JSON 物件結構資料在 JavaScript 中的編碼與解碼</h2>
+    </div>
+    <div class="container">
+        <p id="p1" class="alert alert-danger"></p>
+        <p id="p2" class="alert alert-info"></p>
+        <p id="p3" class="alert alert-success"></p>
+        <p id="p4" class="alert alert-warning"></p>
+    </div>
+    <script>
+        var p1 = document.getElementById('p1');
+        var p2 = document.getElementById('p2');
+        var p3 = document.getElementById('p3');
+        var p4 = document.getElementById('p4');
+
+        //1.從 JSON 字串--> JavaScript 物件
+        //宣告 JSON 物件結構, values 為 string 及 number
+        var jsonPerson = '{"firstname":"Tom","age":30,"city":"Taipei"}';
+
+        //用 JSON.parse() 方法將 JSON 字串解碼還原成 JavaScript Object 物件
+        var jsPerson = JSON.parse(jsonPerson);
+
+        //存取 JavaScript Object 物件屬性值
+        p1.innerHTML = jsPerson.firstname + "," + jsPerson.age + "," + jsPerson.city;
+
+        //2.從 JavaScript 物件--> JSON 字串
+        //宣告 JavaScript 物件
+        var jsEmployee = {
+            employee:
+                { name: "Tim", height: 180, bloodtype: "B" }
+        };
+
+        //顯示 JSON.stringify() 方法將 JavaScript 物件編碼成 JSON 字串
+        var jsonEmployee = JSON.stringify(jsEmployee);
+
+        //顯示 JSON 字串值
+        p2.innerHTML = jsonEmployee;
+
+        //3.從 JSON 字串-->JavaScript 物件
+        //宣告 JSON 物件結構, value 為 string,number,object 及 array
+        var jsonMan = '{"firstname":"可以的","height": 180,"address": { "通訊地址": "台北", "戶籍地址": "台南" },"phone": { "市話": "08-878878", "行動電話": "0987878878" },"cars": ["BMW", "Nissan GT-R", "Audi"]}';
+
+        //用 JSON.parse() 方法將 JSON 字串解碼還原成 JavaScript Object 物件
+        var jsMan = JSON.parse(jsonMan);
+
+        //存取及顯示 JavaScript Object 物件屬性值
+        p3.innerHTML = jsMan.firstname + "," + jsMan.height + "," + jsMan.address.通訊地址 + "," + jsMan.phone.行動電話 + "," + jsMan.cars[2];
+
+        //將 jsMan 再解碼還原成 JSON 字串也沒問題
+        var txtMan = JSON.stringify(jsMan);
+        p4.innerHTML = txtMan;
+    </script>
+</body>
+</html>
