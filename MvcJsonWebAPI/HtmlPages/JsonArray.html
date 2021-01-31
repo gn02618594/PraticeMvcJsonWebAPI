@@ -1,0 +1,75 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <link href="../Content/bootstrap.min.css" rel="stylesheet" />
+    <title></title>
+</head>
+<body>
+    <div class="container">
+        <div class="jumbotron">
+            <h2>JSON 陣列結構資料在 JavaScript 中的編碼與解碼</h2>
+        </div>
+        <div id="p1" class="alert alert-danger"></div>
+        <div id="p2" class="alert alert-info"></div>
+        <div id="p3" class="alert alert-success"></div>
+        <div id="p4" class="alert alert-warning"></div>
+        <div id="p5" class="alert alert-info"></div>
+    </div>
+    <script>
+
+        var p1 = document.getElementById('p1');
+        var p2 = document.getElementById('p2');
+        var p3 = document.getElementById('p3');
+        var p4 = document.getElementById('p4');
+        var p5 = document.getElementById('p5');
+
+        //1.JSON 陣列結構資料-- value 為 number
+        var jsonArray_Num = '[1,3,5,7,9]';
+        //將 JSON 字串解碼原成 JavaScript 陣列
+        var jsArrayNum = JSON.parse(jsonArray_Num);
+        var num = '';
+        //以 for 迴圈存取 JavaScript 陣列中所有元素
+        for (i = 0; i < jsArrayNum.length; i++) {
+            num = num + (i == (jsArrayNum.length - 1) ? jsArrayNum[i] : jsArrayNum[i] + ",");
+        }
+        p1.innerHTML = num;
+
+        //2.JSON 陣列結構資料--value 為 string
+        var jsonArray_String = '["Mary","John","Tom"]';
+        //將 JSON 字串解碼還原成 JavaScript 陣列
+        var jsArrayString = JSON.parse(jsonArray_String);
+        p2.innerHTML = jsArrayString;
+
+        //3.JSON 陣列結構資料-- value 為 object
+        var jsonArray_Object = '[' +
+            '{"firstname":"Mary","age":28,"city":"New York"},' +
+            '{"firstname":"John","age":36,"city":"Tokyo"},' +
+            '{"firstname":"Tom","age":30,"city":"Taipei"}' +
+            ']';
+
+        //將 JSON 字串解碼還原成 JavaSctipt 陣列
+        var jsArrayObject = JSON.parse(jsonArray_Object);
+        //存取 JavaScript 陣列中的物件屬性資料
+        p3.innerHTML = jsArrayObject[1].firstname + "," + jsArrayObject[1].age + "," + jsArrayObject[1].city;
+
+        //4.JSON 陣列結構資料-- value 為 array
+        var jsonArray = '[' +
+            '["Dog","Cat","Mouse"],' +
+            '["Horse","Cow","Sheep"],' +
+            '["Bird","Eagle","Parrot"]' +
+            ']';
+
+        //將 JSON 字串解碼成還原成 JavaSctipt 陣列
+        var jsArray = JSON.parse(jsonArray);
+        p4.innerHTML = jsArray[0][2] + "," + jsArray[1][2] + "," + jsArray[2][1];
+
+        //5.JSON 陣列結構資料-- value 為混合不同型別資料
+        var jsonArray_Mixed = '["Mary",168,{"measurements":[36,24,36]},{"phone":"0925-389-211","age":28,"city":"New York"},{"friends":["John","Anna","Peter"]}]';
+
+        //存取 JavaScript 陣列資料
+        var jsMixed = JSON.parse(jsonArray_Mixed);
+        p5.innerHTML = jsMixed[0] + ",身高" + jsMixed[1] + ",腰圍" + jsMixed[2].measurements[2] + ",住" + jsMixed[3].city + ",最好的朋友是" + jsMixed[4]["friends"][1];
+    </script>
+</body>
+</html>
