@@ -132,6 +132,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\css\myCSS.css" />
+    <Content Include="Assets\js\Colors.js" />
+    <Content Include="Assets\js\md5.js" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
@@ -140,6 +143,7 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="HtmlPages\JQueryAjaxCommands.html" />
     <Content Include="HtmlPages\JsonArray.html" />
     <Content Include="HtmlPages\JsonObject.html" />
     <Content Include="Scripts\bootstrap.js" />
