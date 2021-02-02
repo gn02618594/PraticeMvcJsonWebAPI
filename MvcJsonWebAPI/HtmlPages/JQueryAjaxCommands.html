@@ -4,7 +4,6 @@
     <meta charset="utf-8" />
     <title></title>
     <link href="../Content/bootstrap.min.css" rel="stylesheet" />
-    <script src="../Scripts/jquery-1.10.2.min.js"></script>
     <script src="../Assets/js/Colors.js"></script>
     <style>
         #urlText {
@@ -35,19 +34,21 @@
 
         <div id="urlText" class="alert alert-info"></div>
         <div id="result" class="alert alert-danger"></div>
+        <div id="text" class="alert alert-danger"></div>
     </div>
+    <script src="../Scripts/jquery-3.4.1.min.js"></script>
     <script>
         var result = document.getElementById('result');
         //取消 Ajax 快取
-        $.ajax({ cache: false });
+        //$.ajax({ cache: false });
         //遠端 API 之URL
-        var apiUrl = "/JsonData/getCarSalesNumberRandom";
-        $().ready(function () {
+        var apiUrl = "/JsonDataApi/getCarSalesNumberRandom";
+        $(document).ready(function () {
             //$.ajax()
             $('#ajax').click(function () {
                 //以 $.ajax() 呼叫遠端 API
                 $.ajax({
-                    ur: apiUrl,
+                    url: apiUrl,
                     type: "POST",
                     dataType: "json",
                     success: function (response) {
@@ -87,7 +88,7 @@
             });
 
             //顯示 API URL
-            $('#rulText').text("API URL: " + apiUrl);
+            $('#urlText').text("API URL: " + apiUrl);
 
             //顯示 JSON 資料
             function showAjaxResult(response) {
