@@ -1,0 +1,214 @@
+﻿
+@{
+    ViewBag.Title = "CarSalesAjaxJSON";
+
+}
+<div class="jumbotron alert-success">
+    <h3>以 JQuery Ajax 呼叫各種類型遠端API，取回JSON格式的汽車銷售資料</h3>
+</div>
+
+<select id="urlSelect" class="form-control">
+    <option value="/JsonDataApi/getCarSalesNumber">同專案的 JsonDataApiController</option>
+    <option value="/api/careapi/">同專案的Web API</option>
+</select>
+
+<button class="btn btn-success" id="post">以.post() 呼叫遠端 API</button>
+<button class="btn btn-warning" id="get">以.get() 呼叫遠端 API</button>
+<button class="btn btn-info" id="getJSON">以.getJSON 呼叫遠端 API</button>
+<button class="btn btn-danger" id="reset">Reset</button>
+
+<div id="urlText" class="alert alert-info"></div>
+
+
+<div class="panel panel-primary panel panel-collapse" id="carPanel">
+    <div class="panel-heading">
+        <h3 class="text-center">@DateTime.Now.Year 年度 1-12 月份汽車銷售數字</h3>
+    </div>
+    <div class="panel-body" id="panelBody">
+        <canvas id="chartCanvas"></canvas>
+    </div>
+    <div class="panel-footer text-center">@MyFunctions.getBookTitle()</div>
+</div>
+
+<div id="result" class="alert alert-danger"></div>
+
+@section endJS{
+    <script>
+        var result = document.getElementById('result');
+
+        //取消 Ajax 快取
+        $.ajaxSetup({ cache: false });
+
+        //apiUrl 來自 <select> 控制項的 <option value="...">
+        var apiUrl = '';
+
+        //以JQuery 的方法 Ajax 呼叫遠端 Controller API，取回 JSON 格式資料
+        $().ready(function () {
+            $('#post').click(function () {
+                //遠端 API URL,Ajax 回呼的處理 function - JsonDataHandler()
+                $.post(apiUrl, JsonDataHandler);
+            });
+
+            $('#get').click(function () {
+                $.get(apiUrl, JsonDataHandler);
+            });
+
+            $('#getJSON').click(function () {
+                $.getJSON(apiUrl, JsonDataHandler);
+            });
+        });
+
+        //Ajax 回呼處理 function,將 response 回傳的 JSON 資料指派給 jsArray 陣列
+        var jsArray = null;
+        function JsonDataHandler(response) {
+            if (response != null) {
+                //將回傳的 JSON 資料指定給 jsArray
+                jsArray = response;
+                showLineChart();//繪製圖表 用回傳的 JSON 資料繪製 Chart 圖表
+                result.innerHTML = JSON.stringify(response);
+                result.style.display = 'block';
+            }
+        }
+
+        var canvas = document.getElementById('chartCanvas');
+        //取得<canvas>畫布上的 2d 渲染環境(rendering context)
+        var ctx = canvas.getContext('2d');
+
+        //繪製 Chart 圖表
+        function showLineChart() {
+            //取得<canvas> 畫布
+            document.getElementById('carPanel').style.display = 'block';
+            var chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ["1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"],
+                    datasets: [{
+                        labels: jsArray[0].Car,
+                        data: jsArray[0].Salesdata,
+                        lineTension: 0,
+                        fill: 'origin',
+                        backgroundColor: 'rgba(255,165,0,0.3)',
+                        borderColor: 'rgb(255,165,0)',
+                        pointStyle: "circle",
+                        pointBackgroundColor: 'rgb(0,255,0)',
+                        pointRadius: 5,
+                        pointHoverRadius: 10
+                    }, {
+                        labels: jsArray[1].Car,
+                        data: jsArray[1].Salesdata,
+                        lineTension: 0,
+                        fill: 'origin',
+                        backgroundColor: 'rgba(0,255,255,0.5',
+                        borderColor: 'rgb(0,255,255)',
+                        pointStyle: 'triangle',
+                        pointBackgroundColor: 'rgb(0,0,0)',
+                        pointRadius: 7,
+                        pointHoverRadius: 10
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    title: {
+                        display: true,
+                        fontSize: 26,
+                        text: 'BMW與BENZ汽車銷售數字'
+                    },
+                    tooltips: {
+                        mode: 'point',
+                        intersect: true,
+                    },
+                    hover: {
+                        mode: 'nearest',
+                        intersect: true
+                    },
+                    scales: {
+                        xAxes: [{
+                            display: true,
+                            scaleLabel: {
+                                display: true,
+                                labelString: '月份',
+                                fontSize: 20
+                            },
+                            ticks: {
+                                fontSize: 15
+                            }
+                        }],
+                        yAxes: [{
+                            display: true,
+                            scaleLabel: {
+                                display: true,
+                                labelString: '單位:輛',
+                                fontSize: 20
+                            },
+                            ticks: {
+                                fontSize: 15
+                            }
+                        }]
+                    },
+                    animation: {
+                        duration: 1000
+                    }
+                }
+            });
+        }
+
+        $('#reset').click(function () {
+            clearCanvas();
+        });
+
+        //清除 Canvas
+        function clearCanvas() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            document.getElementById('carPanel').style.display = 'none';
+            result.style.display = 'none';
+            result.innerHTML = "";
+        }
+
+        $('#urlSelect').ready(function () {
+            setUrl();
+        });
+
+        //Select 選項變化時
+        $('#urlSelect').change(function () {
+            setUrl();
+            clearCanvas();
+        });
+
+        //設定 URL 文字
+        function setUrl() {
+            var urlValue = $('#urlSelect').val();
+            $('#urlText').text('API URL : ' + urlValue);
+            apiUrl = urlValue;
+        }
+
+        window.onload = function () {
+            document.getElementById('post').addEventListener('click', function () {
+                clearCanvas();
+            });
+            document.getElementById('get').addEventListener('click', function () {
+                clearCanvas();
+            });
+            document.getElementById('getJSON').addEventListener('click', function () {
+                clearCanvas();
+            });
+        };
+    </script>
+}
+
+@section topCSS{
+    <style>
+        .panel, #result {
+            display: none;
+        }
+
+        #urlText {
+            margin-top: 15px;
+            font-size: 20px;
+        }
+
+        #urlSelect {
+            max-width: 400px !important;
+            display: inline-block;
+        }
+    </style>
+}

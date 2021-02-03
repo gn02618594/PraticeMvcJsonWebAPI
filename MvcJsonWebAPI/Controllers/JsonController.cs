@@ -44,5 +44,9 @@ namespace MvcJsonWebAPI.Controllers
             //將 Models 資料傳給 View，用於資料顯示
             return View(Locations);
         }
+
+        public ActionResult CarSalesAjaxJSON() {
+            return View();
+        }
     }
 }
